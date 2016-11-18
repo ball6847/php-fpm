@@ -15,6 +15,7 @@ RUN apt-get update -y \
         libjpeg62-turbo-dev \
         libmcrypt-dev \
         libpng12-dev \
+        git \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install -j$(nproc) gd iconv mcrypt exif fileinfo mysqli pdo_mysql pcntl tidy xmlrpc xsl zip bcmath pspell shmop sockets \
     && sh -c 'printf "\n" | pecl install memcached' \
