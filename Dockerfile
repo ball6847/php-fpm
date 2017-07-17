@@ -20,13 +20,12 @@ RUN apt-get update -y \
         locales \
 	&& echo "en_US.UTF-8 UTF-8" > /etc/locale.gen \
 	&& locale-gen en_US.UTF-8 \
-	&& dpkg-reconfigure locales \
+    && echo -e 'LANG="en_US.UTF-8"\nLANGUAGE="en_US:en"\n' > /etc/default/locale \
+	&& dpkg-reconfigure --frontend=noninteractive locales \
 	&& /usr/sbin/update-locale LANG=en_US.UTF-8 \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install -j$(nproc) gd iconv mcrypt exif fileinfo mysqli pdo_mysql pcntl tidy xmlrpc xsl zip bcmath pspell shmop sockets \
-    && sh -c 'printf "\n" | pecl install memcached' \
     && pecl install xdebug \
-    && docker-php-ext-enable memcached opcache xdebug \
     && (curl -o- https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer) \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
